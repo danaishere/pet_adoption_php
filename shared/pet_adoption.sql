@@ -25,9 +25,9 @@ description TEXT
 ----------------------------------------------
 
 -------- SAMPLE DATA --------
-INSERT INTO pet_profiles (name, species, breed, age_years, age_months, gender, color, weight_kg, adoption_status, description) VALUES
+INSERT INTO pet_profiles (name, species, breed, age_years, age_months, gender, color, weight_kg, photo, adoption_status, description) VALUES
 ('Bear', 'Dog', 'Labrador Retriever', 5, 2, 'Male', 'Black', 30.3, 'uploads/pets/bear.jpg','Available', 'Friendly lovely little buddy. Loves to play fetch and go for walks.'),
 ('Luna', 'Cat', 'Persian', 9, 0, 'Female', 'White', 4.2, 'uploads/pets/luna.jpg','Available', 'Luna is a calm and affectionate Persian who enjoys lounging and being petted.'),
-('Coco', 'Rabbit', 'Holland Lop', 1, 8,  'Female', 'Black and White', 1.8, 'uploads/pets/coco.jpg''Available', 'Coco is a sweet and gentle bunny, perfect for a quiet home.'),
-('Nala', 'Cat', 'Maine Coon', 3, 4,  'Female', 'Tabby', 5.9, 'uploads/pets/nala.jpg','Pending', 'Nala is a fluffy and very demanding queen who needs someone to respect her personal space. She might have some attitude but she has some soft spot for a good butt scratch.');
-('Rocky', 'Dog', 'Bulldog', 4, 2, 'Male', 'Brindle', 24.0, 'uploads/pets/rocky.jpg','Adopted', 'Rocky is a gentle and laid-back Bulldog who loves naps and short walks.'),
+('Coco', 'Rabbit', 'Holland Lop', 1, 8,  'Female', 'Black and White', 1.8, 'uploads/pets/coco.jpg','Available', 'Coco is a sweet and gentle bunny, perfect for a quiet home.'),
+('Nala', 'Cat', 'Maine Coon', 3, 4,  'Female', 'Tabby', 5.9, 'uploads/pets/nala.jpg','Pending', 'Nala is a fluffy and very demanding queen who needs someone to respect her personal space. She might have some attitude but she has some soft spot for a good butt scratch.'),
+('Rocky', 'Dog', 'Bulldog', 4, 2, 'Male', 'Brindle', 24.0, 'uploads/pets/rocky.jpg','Adopted', 'Rocky is a gentle and laid-back Bulldog who loves naps and short walks.');
