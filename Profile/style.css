@@ -1,0 +1,126 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F0FDF4;
+    color: #111827;
+    padding: 30px;
+}
+
+/* headings */
+h1 {
+    color: #111827;
+    margin-bottom: 20px;
+}
+
+
+nav {
+    margin-bottom: 20px;
+}
+
+nav a {
+    color: #4ADE80;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+nav a:hover {
+    color: #34D399;
+}
+
+/* forms */
+form {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    max-width: 500px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #111827;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #34D399;
+    border-radius: 5px;
+}
+
+input[type="checkbox"] {
+    margin-bottom: 15px;
+}
+
+input[type="submit"] {
+    background-color: #4ADE80;
+    color: #111827;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #34D399;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th {
+    background-color: #4ADE80;
+    color: #111827;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #F0FDF4;
+}
+
+tr:hover {
+    background-color: #F0FDF4;
+}
+
+
+td a {
+    color: #4ADE80;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+td a:hover {
+    color: #34D399;
+}
+
+
+.success {
+    color: green;
+    margin-bottom: 15px;
+}
+
+ul.errors {
+    color: red;
+    margin-bottom: 15px;
+    padding-left: 20px;
+}

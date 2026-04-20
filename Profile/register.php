@@ -1,12 +1,13 @@
+<!-- create  -->
 <?php
-require_once 'C:/Users/elamr/Desktop/pet_adoption_php/shared/db.php';
-
+require_once '../shared/db.php';
+// Empty arrays for errors and success message
 $errors = [];
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
-    // Get form data
+     // Get the data from the form
     $full_name = $_POST['full_name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -15,23 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $has_yard = isset($_POST['has_yard']) ? 1 : 0;
     $experience = $_POST['experience'];
     $pet_preference = $_POST['pet_preference'];
-
-    // Validate
+// Validate the form fields
     if (empty($full_name)) $errors[] = 'Full name is required';
     if (empty($email)) $errors[] = 'Email is required';
     if (empty($password)) $errors[] = 'Password is required';
     if (empty($housing_type)) $errors[] = 'Housing type is required';
 
     if (empty($errors)) {
-        // Hash the password
+           // Hash the password before saving
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Insert into database
+       
         $stmt = $conn->prepare('INSERT INTO adopters (full_name, email, password, phone, housing_type, has_yard, experience, pet_preference) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
         $stmt->bind_param('sssssiss', $full_name, $email, $hashed_password, $phone, $housing_type, $has_yard, $experience, $pet_preference);
-
+// Show success or error message
         if ($stmt->execute()) {
-            $success = 'Registration successful!';
+            header('Location: index.php');
+exit();
         } else {
             $errors[] = 'Something went wrong. Please try again.';
         }
@@ -44,26 +45,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Register - Pet Adoption</title>
+        <link rel="stylesheet" href="../yassine/style.css">
+
 </head>
 <body>
 
     <h1>Adopter Registration</h1>
-
-    <!-- Show errors -->
+ <!-- Show error messages if any -->
+   
     <?php if (!empty($errors)): ?>
-        <ul style="color:red;">
+        <ul class="errors">
             <?php foreach ($errors as $error): ?>
                 <li><?php echo $error; ?></li>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
 
-    <!-- Show success -->
+
     <?php if ($success): ?>
-        <p style="color:green;"><?php echo $success; ?></p>
+        <p class="success"><?php echo $success; ?></p>
     <?php endif; ?>
 
-    <!-- Registration Form -->
+  
     <form action="#" method="post">
 
         <label>Full Name:</label>
