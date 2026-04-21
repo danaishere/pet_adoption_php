@@ -1,6 +1,22 @@
 
 
 -- TABLES
+-- ADOPTERS -- 
+CREATE TABLE adopters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    housing_type VARCHAR(50),
+    has_yard TINYINT(1) DEFAULT 0,
+    experience VARCHAR(50),
+    pet_preference VARCHAR(100),
+    is_active TINYINT(1) DEFAULT 1,
+    date_registered DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- PET PROFILE -- 
 CREATE TABLE pet_profiles (
 pet_id INT AUTO_INCREMENT PRIMARY KEY,
