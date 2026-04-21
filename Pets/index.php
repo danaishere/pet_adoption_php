@@ -93,7 +93,7 @@ $speciesResult = $conn->query("SELECT DISTINCT species FROM pet_profiles ORDER B
     <label>Search:</label>
     <input type="text" name="search" placeholder="Name or breed..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
 
-    <input type="submit" value="Filter">
+    <input type="submit" value="Search">
     <a href="index.php" class="btn btn-secondary-custom btn-sm">Reset</a>
 </form>
 
