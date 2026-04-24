@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $address = trim($_POST['address']);
     $city = trim($_POST['city']);
     $province = trim($_POST['province']);
-    $capacity = (int)$_POST['capacity'];
+    $capacity = int($_POST['capacity']);
     $description = trim($_POST['description']);
 
 if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) && $capacity >= 0 ){

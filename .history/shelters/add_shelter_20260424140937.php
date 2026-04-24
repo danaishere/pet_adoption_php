@@ -3,35 +3,35 @@ require_once "../shared/db.php";
 include("includes/header.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $name = trim($_POST['name']);
+    $name = trim$_POST['name'];
     $type = $_POST['type'];
-    $email = trim($_POST['email']);
-    $phone = trim($_POST['phone']);
-    $address = trim($_POST['address']);
-    $city = trim($_POST['city']);
-    $province = trim($_POST['province']);
-    $capacity = (int)$_POST['capacity'];
-    $description = trim($_POST['description']);
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $province = $_POST['province'];
+    $capacity = $_POST['capacity'];
+    $description = $_POST['description'];
 
-if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) && $capacity >= 0 ){
+if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) && $capacity >= 0){
         $sql = "INSERT INTO shelters 
         (name, type, email, phone, address, city, province, capacity, description)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
 
-       $stmt->bind_param(
-    "sssssssis",
-    $name,
-    $type,
-    $email,
-    $phone,
-    $address,
-    $city,
-    $province,
-    $capacity,
-    $description
-);
+        $stmt->bind_param(
+            "sssssssiss",
+            $name,
+            $type,
+            $email,
+            $phone,
+            $address,
+            $city,
+            $province,
+            $capacity,
+            $description
+        );
 
       if ($stmt->execute()) {
     header("Location: index.php?success=added");
@@ -68,7 +68,6 @@ if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) &&
         </select>
     </div>
 </div>
-
 
 <div class="row">
     <div class="col-md-6 mb-3">

@@ -2,43 +2,33 @@
 require_once "../shared/db.php";
 include("includes/header.php");
 
-// Validate ID
+// Get ID safely
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "<div class='alert alert-danger m-4'>Invalid Shelter ID</div>";
-    include("includes/footer.php");
+    include("../includes/footer.php");
     exit();
 }
 
-$id = (int)$_GET['id'];
+$id = $_GET['id'];
 
 // Fetch shelter
 $sql = "SELECT * FROM shelters WHERE shelter_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
+
 $result = $stmt->get_result();
 $shelter = $result->fetch_assoc();
 
 if (!$shelter) {
     echo "<div class='alert alert-warning m-4'>Shelter not found</div>";
-    include("includes/footer.php");
+    include("../includes/footer.php");
     exit();
 }
 
-// Get capacity
-$capacity = $shelter['capacity'];
-
-// Count pets dynamically (CORRECT WAY)
-$countSql = "SELECT COUNT(*) as total FROM pet_profiles WHERE shelter_id = ?";
-$countStmt = $conn->prepare($countSql);
-$countStmt->bind_param("i", $id);
-$countStmt->execute();
-$countResult = $countStmt->get_result();
-$countRow = $countResult->fetch_assoc();
-
-$current = $countRow['total'];
-
 // Progress calculation
+$capacity = $shelter['capacity'];
+$current = $shelter['current_occupancy'];
 $percent = ($capacity > 0) ? ($current / $capacity) * 100 : 0;
 ?>
 
@@ -53,7 +43,7 @@ $percent = ($capacity > 0) ? ($current / $capacity) * 100 : 0;
             </h2>
 
             <span class="badge <?= $shelter['verification_status'] == 'Verified' ? 'bg-success' : 'bg-warning text-dark' ?>">
-                <?= htmlspecialchars($shelter['verification_status']) ?>
+                <?= $shelter['verification_status'] ?>
             </span>
 
             <hr>
@@ -73,7 +63,7 @@ $percent = ($capacity > 0) ? ($current / $capacity) * 100 : 0;
                         <?= htmlspecialchars($shelter['address']) ?>
                     </p>
 
-                    <p><strong>Occupancy:</strong> <?= $current ?> / <?= $capacity ?> pets</p>
+                    <p><strong>Capacity:</strong> <?= $current ?> / <?= $capacity ?></p>
 
                     <div class="progress mb-3">
                         <div class="progress-bar bg-info"
@@ -96,17 +86,17 @@ $percent = ($capacity > 0) ? ($current / $capacity) * 100 : 0;
             <div class="mt-4 d-flex gap-2">
 
                 <a href="edit_shelter.php?id=<?= $shelter['shelter_id'] ?>" class="btn btn-warning">
-                    Edit
+                     Edit
                 </a>
 
-                <a href="delete_shelter.php?id=<?= $shelter['shelter_id'] ?>" 
+                <a href="delete.php?id=<?= $shelter['shelter_id'] ?>" 
                    class="btn btn-danger"
                    onclick="return confirm('Are you sure?')">
                     Delete
                 </a>
 
                 <a href="index.php" class="btn btn-secondary">
-                    Back
+                 Back
                 </a>
 
             </div>
@@ -115,13 +105,11 @@ $percent = ($capacity > 0) ? ($current / $capacity) * 100 : 0;
     </div>
 
 </div>
-
-<!-- PETS SECTION -->
 <hr>
-<div class="container">
 <h4 class="mb-3">Pets in This Shelter</h4>
 
 <?php
+// Fetch pets assigned to this shelter
 $petSql = "SELECT * FROM pet_profiles WHERE shelter_id = ?";
 $petStmt = $conn->prepare($petSql);
 $petStmt->bind_param("i", $id);
@@ -166,7 +154,4 @@ $petResult = $petStmt->get_result();
         No pets assigned to this shelter yet.
     </div>
 <?php endif; ?>
-
-</div>
-
 <?php include("includes/footer.php"); ?>

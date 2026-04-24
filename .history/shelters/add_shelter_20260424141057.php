@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $address = trim($_POST['address']);
     $city = trim($_POST['city']);
     $province = trim($_POST['province']);
-    $capacity = (int)$_POST['capacity'];
+    $capacity = trim($_POST['capacity']);
     $description = trim($_POST['description']);
 
 if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) && $capacity >= 0 ){
@@ -20,18 +20,18 @@ if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) &&
 
         $stmt = $conn->prepare($sql);
 
-       $stmt->bind_param(
-    "sssssssis",
-    $name,
-    $type,
-    $email,
-    $phone,
-    $address,
-    $city,
-    $province,
-    $capacity,
-    $description
-);
+        $stmt->bind_param(
+            "sssssssiss",
+            $name,
+            $type,
+            $email,
+            $phone,
+            $address,
+            $city,
+            $province,
+            $capacity,
+            $description
+        );
 
       if ($stmt->execute()) {
     header("Location: index.php?success=added");

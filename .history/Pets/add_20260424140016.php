@@ -6,63 +6,31 @@ require_once '../shared/header.php';
 require_once '../shared/db.php';
 
 $errors = [];
+$success = '';
 
-// Get all shelters
 $shelters = mysqli_query($conn, "SELECT * FROM shelters");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $name = trim($_POST['name']);
+    $name = $_POST['name'];
     $species = $_POST['species'];
-    $breed = trim($_POST['breed']);
-    $ageYears = (int)$_POST['age_years'];
-    $ageMonths = (int)$_POST['age_months'];
+    $breed = $_POST['breed'];
+    $ageYears = $_POST['age_years'];
+    $ageMonths = $_POST['age_months'];
     $gender = $_POST['gender'];
-    $color = trim($_POST['color']);
-    $weightKg = $_POST['weight_kg'] !== '' ? (float)$_POST['weight_kg'] : null;
+    $color = $_POST['color'];
+    $weightKg = $_POST['weight_kg'];
     $adoptionStatus = $_POST['adoption_status'];
-    $description = trim($_POST['description']);
-    $shelterId = (int)$_POST['shelter_id'];
+    $description = $_POST['description'];
+    $shelterId = $_POST['shelter_id'];
 
-    // Basic Validation
+    // Validation
     if (empty($name)) $errors[] = 'Pet name is required';
     if (empty($species)) $errors[] = 'Species is required';
     if (empty($gender)) $errors[] = 'Gender is required';
     if (empty($shelterId)) $errors[] = 'Shelter is required';
 
-    // ✅ Capacity Check (Dynamic)
-    if (empty($errors)) {
-
-        // Count current pets in selected shelter
-        $countStmt = $conn->prepare("
-            SELECT COUNT(*) as total 
-            FROM pet_profiles 
-            WHERE shelter_id = ?
-        ");
-        $countStmt->bind_param("i", $shelterId);
-        $countStmt->execute();
-        $countResult = $countStmt->get_result();
-        $countRow = $countResult->fetch_assoc();
-        $currentCount = $countRow['total'];
-
-        // Get shelter capacity
-        $capStmt = $conn->prepare("
-            SELECT capacity 
-            FROM shelters 
-            WHERE shelter_id = ?
-        ");
-        $capStmt->bind_param("i", $shelterId);
-        $capStmt->execute();
-        $capResult = $capStmt->get_result();
-        $capRow = $capResult->fetch_assoc();
-        $maxCapacity = $capRow['capacity'];
-
-        if ($currentCount >= $maxCapacity) {
-            $errors[] = "This shelter is full. Cannot add more pets.";
-        }
-    }
-
-    // ✅ Photo Upload
+    // Photo upload
     $photoPath = null;
 
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
@@ -92,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // ✅ Insert Pet
+    // Insert
     if (empty($errors)) {
 
         $stmt = $conn->prepare("
@@ -143,10 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <form method="post" enctype="multipart/form-data">
 
 <label>Pet Name:</label>
-<input type="text" name="name" required>
+<input type="text" name="name">
 
 <label>Species:</label>
-<select name="species" required>
+<select name="species">
     <option value="">-- Select --</option>
     <option>Dog</option>
     <option>Cat</option>
@@ -163,19 +131,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <option value="">-- Select Shelter --</option>
     <?php while ($row = mysqli_fetch_assoc($shelters)): ?>
         <option value="<?php echo $row['shelter_id']; ?>">
-            <?php echo htmlspecialchars($row['name']); ?>
+            <?php echo $row['name']; ?>
         </option>
     <?php endwhile; ?>
 </select>
 
 <label>Age (Years):</label>
-<input type="number" name="age_years" value="0" min="0">
+<input type="number" name="age_years" value="0">
 
 <label>Age (Months):</label>
-<input type="number" name="age_months" value="0" min="0" max="11">
+<input type="number" name="age_months" value="0">
 
 <label>Gender:</label>
-<select name="gender" required>
+<select name="gender">
     <option value="">-- Select --</option>
     <option>Male</option>
     <option>Female</option>
@@ -185,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <input type="text" name="color">
 
 <label>Weight (kg):</label>
-<input type="number" step="0.01" name="weight_kg" min="0">
+<input type="number" step="0.01" name="weight_kg">
 
 <label>Photo:</label>
 <input type="file" name="photo">

@@ -10,28 +10,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $address = trim($_POST['address']);
     $city = trim($_POST['city']);
     $province = trim($_POST['province']);
-    $capacity = (int)$_POST['capacity'];
+    $capacity = trim($_POST['capacity']);
     $description = trim($_POST['description']);
 
-if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) && $capacity >= 0 ){
+if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) && $capacity >= 0){
         $sql = "INSERT INTO shelters 
         (name, type, email, phone, address, city, province, capacity, description)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
 
-       $stmt->bind_param(
-    "sssssssis",
-    $name,
-    $type,
-    $email,
-    $phone,
-    $address,
-    $city,
-    $province,
-    $capacity,
-    $description
-);
+        $stmt->bind_param(
+            "sssssssiss",
+            $name,
+            $type,
+            $email,
+            $phone,
+            $address,
+            $city,
+            $province,
+            $capacity,
+            $description
+        );
 
       if ($stmt->execute()) {
     header("Location: index.php?success=added");
@@ -69,7 +69,9 @@ if (!empty($name) && !empty($type) && !empty($email) && is_numeric($capacity) &&
     </div>
 </div>
 
-
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errors[] = "Invalid email format";
+}
 <div class="row">
     <div class="col-md-6 mb-3">
         <label class="form-label">Email</label>
