@@ -1,47 +1,33 @@
 <?php
 session_start();
-include "../config/db.php";
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../login.php");
-    exit();
-}
-
-include "../includes/header.php";
-
+// In applications/apply.php, list.php, edit.php, view.php, delete.php, my_applications.php, success.php
+include "../../shared/db.php";      // ✅
+include "../../shared/header.php";  // ✅
+include "../../shared/footer.php";  // ✅
 
 $status = $_GET['status'] ?? 'all';
-
 $sql = "
-    SELECT applications.id,
-           applications.status,
-           applications.interview_date,
-           applications.created_at,
-           adopters.full_name,
-           adopters.email,
-           pet_profiles.name    AS pet_name,
-           pet_profiles.species AS pet_species
+    SELECT applications.id, applications.status, applications.interview_date, applications.created_at,
+           adopters.full_name, adopters.email,
+           pet_profiles.name AS pet_name, pet_profiles.species AS pet_species
     FROM applications
     JOIN adopters     ON applications.adopter_id = adopters.id
     JOIN pet_profiles ON applications.pet_id     = pet_profiles.pet_id
 ";
-
 if ($status !== 'all') {
     $sql .= " WHERE applications.status = '$status'";
 }
-
 $sql .= " ORDER BY applications.created_at DESC";
-
 $result = $conn->query($sql);
 
 function statusBadge($status) {
     $map = ['pending'=>'warning','approved'=>'success','completed'=>'primary','rejected'=>'danger'];
-    $b   = $map[$status] ?? 'secondary';
+    $b = $map[$status] ?? 'secondary';
     return "<span class='badge bg-$b'>$status</span>";
 }
 ?>
 
-<h2 class="mb-3"> All Applications</h2>
+<h2 class="mb-3">All Applications</h2>
 
 <?php if (isset($_GET['updated'])): ?>
     <div class="alert alert-success">Application updated successfully.</div>
@@ -50,7 +36,6 @@ function statusBadge($status) {
     <div class="alert alert-warning">Application deleted.</div>
 <?php endif; ?>
 
-<!-- Filter by status -->
 <form method="GET" class="d-flex align-items-center gap-2 mb-4">
     <label class="fw-bold mb-0">Filter by Status:</label>
     <select name="status" class="form-select w-auto">
@@ -69,19 +54,11 @@ function statusBadge($status) {
 <?php if ($result->num_rows === 0): ?>
     <div class="alert alert-info">No applications found for this filter.</div>
 <?php else: ?>
-
 <table class="table table-bordered table-hover align-middle">
     <thead class="table-dark">
         <tr>
-            <th>#</th>
-            <th>Adopter</th>
-            <th>Email</th>
-            <th>Pet</th>
-            <th>Species</th>
-            <th>Status</th>
-            <th>Interview Date</th>
-            <th>Applied On</th>
-            <th>Actions</th>
+            <th>#</th><th>Adopter</th><th>Email</th><th>Pet</th><th>Species</th>
+            <th>Status</th><th>Interview Date</th><th>Applied On</th><th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -93,20 +70,18 @@ function statusBadge($status) {
             <td><?= htmlspecialchars($row['pet_name']) ?></td>
             <td><?= htmlspecialchars($row['pet_species']) ?></td>
             <td><?= statusBadge($row['status']) ?></td>
-            <td><?= $row['interview_date'] ? $row['interview_date'] : '<span class="text-muted">—</span>' ?></td>
+            <td><?= $row['interview_date'] ?? '<span class="text-muted">—</span>' ?></td>
             <td><?= $row['created_at'] ?></td>
             <td>
                 <a href="view.php?id=<?= $row['id'] ?>"   class="btn btn-sm btn-info">View</a>
                 <a href="edit.php?id=<?= $row['id'] ?>"   class="btn btn-sm btn-warning">Edit</a>
-                <a href="delete.php?id=<?= $row['id'] ?>"
-                   class="btn btn-sm btn-danger"
+                <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-danger"
                    onclick="return confirm('Delete this application?')">Delete</a>
             </td>
         </tr>
         <?php endwhile; ?>
     </tbody>
 </table>
-
 <?php endif; ?>
 
-<?php include "../includes/footer.php"; ?>
+<?php include "../shared/footer.php"; ?>

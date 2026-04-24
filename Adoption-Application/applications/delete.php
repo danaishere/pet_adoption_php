@@ -1,6 +1,9 @@
 <?php
 session_start();
-include "../config/db.php";
+// In applications/apply.php, list.php, edit.php, view.php, delete.php, my_applications.php, success.php
+include "../../shared/db.php";      // ✅
+include "../../shared/header.php";  // ✅
+include "../../shared/footer.php";  // ✅
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
