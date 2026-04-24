@@ -1,12 +1,12 @@
 <?php
 session_start();
-include "shared/db.php";
+include "../shared/db.php";
 
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] === 'admin') {
         header("Location: /Adoption-Application/admin/dashboard.php");
     } else {
-        header("Location: /Adoption-Application/applications/apply.php");
+        header("Location: /pets/index.php");
     }
     exit();
 }
@@ -29,7 +29,7 @@ if (isset($_POST['login'])) {
             if ($user['role'] === 'admin') {
                 header("Location: /Adoption-Application/admin/dashboard.php");
             } else {
-                header("Location: /Adoption-Application/applications/apply.php");
+                header("Location: /pets/index.php");
             }
             exit();
         }
@@ -52,6 +52,9 @@ if (isset($_POST['login'])) {
                     <h4 class="mb-0">Pet Adoption Login</h4>
                 </div>
                 <div class="card-body p-4">
+                    <?php if (isset($_GET['registered'])): ?>
+                        <div class="alert alert-success">Registration successful! Please log in.</div>
+                    <?php endif; ?>
                     <?php if ($error): ?>
                         <div class="alert alert-danger"><?= $error ?></div>
                     <?php endif; ?>
@@ -66,6 +69,9 @@ if (isset($_POST['login'])) {
                         </div>
                         <button type="submit" name="login" class="btn btn-dark w-100">Login</button>
                     </form>
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="/Profile/register.php">Register here</a></p>
+                    </div>
                 </div>
             </div>
         </div>

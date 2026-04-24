@@ -1,9 +1,7 @@
 <?php
 session_start();
-// In applications/apply.php, list.php, edit.php, view.php, delete.php, my_applications.php, success.php
-include "../../shared/db.php";      // ✅
-include "../../shared/header.php";  // ✅
-include "../../shared/footer.php";  // ✅
+require_once "../../shared/db.php";
+require_once "../../shared/header.php";
 
 $id  = intval($_GET['id']);
 $app = $conn->query("
@@ -19,25 +17,30 @@ $app = $conn->query("
 
 if (!$app) {
     echo "<div class='alert alert-danger'>Application not found.</div>";
-    include "../shared/footer.php";
+    require_once "../../shared/footer.php";
     exit();
 }
 
 if (isset($_POST['update'])) {
     $new_status     = $_POST['status'];
     $interview_date = $_POST['interview_date'];
+    $pet_id         = $app['pet_profile_id'];
+
     if (empty($interview_date)) {
         $conn->query("UPDATE applications SET status='$new_status', interview_date=NULL WHERE id=$id");
     } else {
         $conn->query("UPDATE applications SET status='$new_status', interview_date='$interview_date' WHERE id=$id");
     }
-    $pet_id = $app['pet_profile_id'];
+
     if ($new_status === 'rejected') {
         $conn->query("UPDATE pet_profiles SET adoption_status='Available' WHERE pet_id=$pet_id");
     } elseif ($new_status === 'completed') {
         $conn->query("UPDATE pet_profiles SET adoption_status='Adopted' WHERE pet_id=$pet_id");
+    } elseif ($new_status === 'approved') {
+        $conn->query("UPDATE pet_profiles SET adoption_status='Pending' WHERE pet_id=$pet_id");
     }
-    header("Location: list.php?updated=1");
+
+    header("Location: /Adoption-Application/index.php?updated=1");
     exit();
 }
 
@@ -62,4 +65,26 @@ if (!empty($app['interview_date'])) {
 
 <form method="POST" class="card p-4 shadow-sm" style="max-width:500px;">
     <div class="mb-3">
-        <label class="form-label fw-bol
+        <label class="form-label fw-bold">Update Status</label>
+        <select name="status" class="form-select">
+            <option value="pending"   <?= $app['status'] === 'pending'   ? 'selected' : '' ?>>Pending</option>
+            <option value="approved"  <?= $app['status'] === 'approved'  ? 'selected' : '' ?>>Approved</option>
+            <option value="completed" <?= $app['status'] === 'completed' ? 'selected' : '' ?>>Completed</option>
+            <option value="rejected"  <?= $app['status'] === 'rejected'  ? 'selected' : '' ?>>Rejected</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label fw-bold">Interview Date & Time</label>
+        <input type="datetime-local" name="interview_date" class="form-control"
+               value="<?= $interview_val ?>">
+        <small class="text-muted">Leave blank to clear the interview date.</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" name="update" class="btn btn-success">Save Changes</button>
+        <a href="/Adoption-Application/index.php" class="btn btn-outline-secondary">← Back to List</a>
+    </div>
+</form>
+
+<?php require_once "../../shared/footer.php"; ?>

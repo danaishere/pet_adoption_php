@@ -4,7 +4,7 @@ include("includes/header.php");
 
 $id = $_GET['id'];
 
-/* ---------------- FETCH DATA ---------------- */
+
 $stmt = $conn->prepare("SELECT * FROM shelters WHERE shelter_id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
@@ -16,7 +16,7 @@ if (!$shelter) {
     die("<div class='alert alert-danger m-4'>Shelter not found</div>");
 }
 
-/* ---------------- UPDATE ---------------- */
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "UPDATE shelters SET
@@ -48,12 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!-- TITLE -->
+
 <h2 class="mb-4 text-center fw-bold mt-4">
    Edit Shelter
 </h2>
 
-<!-- FORM CARD -->
+
 <div class="card shadow p-4">
 
 <form method="POST" name="shelterForm" onsubmit="return validateForm();">

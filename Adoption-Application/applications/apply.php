@@ -1,9 +1,9 @@
 <?php
 session_start();
-include "../shared/db.php";
-include "../shared/header.php";
+include "../../shared/db.php";
+include "../../shared/header.php";
 
-$user_id = $_SESSION['user_id'] ?? 1; // fallback for no-auth setup
+$user_id = $_SESSION['user_id'] ?? 1; 
 
 $applied_pet_ids = [];
 $res = $conn->query("SELECT pet_id FROM applications WHERE adopter_id=$user_id AND status != 'rejected'");
@@ -79,4 +79,4 @@ $pets = $conn->query("SELECT * FROM pet_profiles WHERE adoption_status='Availabl
     <a href="my_applications.php" class="btn btn-outline-dark">My Applications</a>
 </div>
 
-<?php include "../shared/footer.php"; ?>
+<?php include "../../shared/footer.php"; ?>

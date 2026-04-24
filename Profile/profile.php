@@ -1,7 +1,7 @@
-<!-- Read -->
 <?php
+session_start();
 require_once '../shared/db.php';
-include "../shared/header.php";
+require_once '../shared/header.php';
 
 // Get all active adopters from the database
 $stmt = $conn->prepare('SELECT * FROM adopters WHERE is_active = 1');
@@ -9,66 +9,48 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Adopter Profiles</title>
-        <link rel="stylesheet" href="../yassine/style.css">
+<h1 class="mb-4">Adopter Profiles</h1>
 
-</head>
-<body>
-
-    <h1>Adopter Profiles</h1>
- <!-- Show success message if an account was just deactivated -->
-    <?php if (isset($_GET['deleted'])): ?>
-    <p class="success">Account deactivated successfully!</p>
+<?php if (isset($_GET['deleted'])): ?>
+    <div class="alert alert-success">Account deleted successfully!</div>
 <?php endif; ?>
-<!-- Link to register a new adopter -->
-    <a href="register.php">Register New Adopter</a>
 
-    <br><br>
+<a href="register.php" class="btn btn-primary-custom mb-3">+ Register New Adopter</a>
 
-    <?php if ($result->num_rows == 0): ?>
-        <p>No adopters found.</p>
-    <?php else: ?>
-
-        <table border="1" cellpadding="10">
+<?php if ($result->num_rows == 0): ?>
+    <div class="alert alert-info">No adopters found.</div>
+<?php else: ?>
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
             <tr>
-                <th>ID</th>
-                <th>Full Name</th>
+                <th>#</th>
+                <th>Name</th>
                 <th>Email</th>
-                <th>Phone</th>
                 <th>Housing</th>
-                <th>Has Yard</th>
                 <th>Experience</th>
                 <th>Pet Preference</th>
                 <th>Actions</th>
             </tr>
-
+        </thead>
+        <tbody>
             <?php while ($row = $result->fetch_assoc()): ?>
             <tr>
                 <td><?php echo $row['id']; ?></td>
-                <td><?php echo $row['full_name']; ?></td>
-                <td><?php echo $row['email']; ?></td>
-                <td><?php echo $row['phone']; ?></td>
-                <td><?php echo $row['housing_type']; ?></td>
-                <td><?php echo $row['has_yard'] ? 'Yes' : 'No'; ?></td>
-                <td><?php echo $row['experience']; ?></td>
-                <td><?php echo $row['pet_preference']; ?></td>
+                <td><?php echo htmlspecialchars($row['full_name']); ?></td>
+                <td><?php echo htmlspecialchars($row['email']); ?></td>
+                <td><?php echo htmlspecialchars($row['housing_type']); ?></td>
+                <td><?php echo htmlspecialchars($row['experience']); ?></td>
+                <td><?php echo htmlspecialchars($row['pet_preference']); ?></td>
                 <td>
-                    <a href="edit_profile.php?id=<?php echo $row['id']; ?>">Edit</a>
-                    |
-                    <a href="delete_account.php?id=<?php echo $row['id']; ?>">Delete</a>
+                    <a href="view.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-info">View</a>
+                    <a href="edit_profile.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="delete_account.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this account?')">Delete</a>
                 </td>
             </tr>
             <?php endwhile; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
 
-        </table>
-
-    <?php endif; ?>
-
-</body>
-</html>
-<?php
-include "../shared/footer.php"; ?>
+<?php require_once '../shared/footer.php'; ?>

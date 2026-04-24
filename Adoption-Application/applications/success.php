@@ -1,9 +1,7 @@
 <?php
 session_start();
-// In applications/apply.php, list.php, edit.php, view.php, delete.php, my_applications.php, success.php
-include "../../shared/db.php";      // ✅
-include "../../shared/header.php";  // ✅
-include "../../shared/footer.php";  // ✅
+require_once "../../shared/db.php";
+require_once "../../shared/header.php";
 ?>
 
 <div class="text-center mt-5">
@@ -17,9 +15,9 @@ include "../../shared/footer.php";  // ✅
         <p class="text-muted">Your adoption application has been submitted successfully.<br>We will review it and get back to you soon.</p>
     <?php endif; ?>
     <div class="mt-4 d-flex justify-content-center gap-3">
-        <a href="apply.php"           class="btn btn-success">Apply for Another Pet</a>
+        <a href="/pets/index.php" class="btn btn-success">View More Pets</a>
         <a href="my_applications.php" class="btn btn-outline-dark">View My Applications</a>
     </div>
 </div>
 
-<?php include "../shared/footer.php"; ?>
+<?php require_once "../../shared/footer.php"; ?>

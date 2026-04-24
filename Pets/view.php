@@ -62,9 +62,21 @@ require_once '../shared/header.php';
                 </div>
 
                 <div class="mt-3">
-                    <a href="edit.php?id=<?php echo $pet['pet_id']; ?>" class="btn btn-primary-custom">Edit Pet</a>
-                    <a href="delete.php?id=<?php echo $pet['pet_id']; ?>" class="btn btn-danger-custom" onclick="return confirm('Are you sure you want to remove this pet?')">Delete Pet</a>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <a href="edit.php?id=<?php echo $pet['pet_id']; ?>" class="btn btn-primary-custom">Edit Pet</a>
+                        <a href="delete.php?id=<?php echo $pet['pet_id']; ?>" class="btn btn-danger-custom" onclick="return confirm('Are you sure you want to remove this pet?')">Delete Pet</a>
+                    <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'adopter'): ?>
+                        <?php if ($pet['adoption_status'] === 'Available'): ?>
+                            <form method="POST" action="/Adoption-Application/applications/apply.php">
+                                <input type="hidden" name="pet_id" value="<?php echo $pet['pet_id']; ?>">
+                                <button type="submit" name="apply" class="btn btn-success">Apply for this Pet</button>
+                            </form>
+                        <?php else: ?>
+                            <button class="btn btn-secondary" disabled>Not Available</button>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
+
             </div>
         </div>
     </div>

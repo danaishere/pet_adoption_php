@@ -6,7 +6,7 @@ $sql = "SELECT * FROM shelters ORDER BY created_at DESC";
 $result = $conn->query($sql);
 $shelters = $result->fetch_all(MYSQLI_ASSOC);
 ?>
-<!-- HERO SECTION -->
+
 <div class="hero-wrapper">
     <img src="../assets/images/cat_shelter.jpg" alt="Shelter Banner">
 

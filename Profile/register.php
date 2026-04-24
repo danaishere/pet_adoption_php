@@ -28,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
        
-        $stmt = $conn->prepare('INSERT INTO adopters (full_name, email, password, phone, housing_type, has_yard, experience, pet_preference) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-        $stmt->bind_param('sssssiss', $full_name, $email, $hashed_password, $phone, $housing_type, $has_yard, $experience, $pet_preference);
+       $stmt = $conn->prepare('INSERT INTO adopters (full_name, email, password, phone, housing_type, has_yard, experience, pet_preference, role, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, "adopter", 1)');
+$stmt->bind_param('sssssiss', $full_name, $email, $hashed_password, $phone, $housing_type, $has_yard, $experience, $pet_preference);
 // Show success or error message
-        if ($stmt->execute()) {
-            header('Location: index.php');
-exit();
-        } else {
+      if ($stmt->execute()) {
+    header('Location: /Adoption-Application/login.php?registered=1');
+    exit();
+} else {
             $errors[] = 'Something went wrong. Please try again.';
         }
     }

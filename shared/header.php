@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,35 +31,53 @@
 
         <!-- Left links -->
         <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/pets/index.php">Manage Pets</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/Adoption-Application/index.php">Applications List</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/profile/index.php">Adopter Database</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/shelters/index.php">Shelters</a>
-          </li>
+          <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+            <li class="nav-item">
+              <a class="nav-link" href="/pets/index.php">Manage Pets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Adoption-Application/index.php">Applications List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile/index.php">Adopter Database</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Profile/register.php">Register Adopter</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/shelters/index.php">Shelters</a>
+            </li>
+          <?php elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'adopter'): ?>
+            <li class="nav-item">
+              <a class="nav-link" href="/pets/index.php">View Pets</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Adoption-Application/applications/my_applications.php">My Applications</a>
+            </li>
+          <?php endif; ?>
         </ul>
 
-        <!-- Right:-->
+        <!-- Right -->
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle profileToggle" href="#" id="profileDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Admin
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end profileMenu" aria-labelledby="profileDropdown">
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li>
-                <hr class="dropdown-divider profileDivider">
-              </li>
-              <li><a class="dropdown-item signOutLink" href="/profile/logout.php">Sign Out</a></li>
-            </ul>
-          </li>
+          <?php if (isset($_SESSION['user_id'])): ?>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle profileToggle" href="#" id="profileDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end profileMenu" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li>
+                  <hr class="dropdown-divider profileDivider">
+                </li>
+                <li><a class="dropdown-item signOutLink" href="/Adoption-Application/logout.php">Sign Out</a></li>
+              </ul>
+            </li>
+          <?php else: ?>
+            <li class="nav-item">
+              <a class="nav-link" href="/Adoption-Application/login.php">Login</a>
+            </li>
+          <?php endif; ?>
         </ul>
 
       </div>

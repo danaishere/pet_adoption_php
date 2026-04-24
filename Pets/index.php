@@ -47,14 +47,18 @@ $result = $stmt->get_result();
 
 // Get distinct species for filter dropdown
 $speciesResult = $conn->query("SELECT DISTINCT species FROM pet_profiles ORDER BY species");
+
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 ?>
 
-<h1>All Pets</h1>
+<h1><?php echo $isAdmin ? 'All Pets' : 'Available Pets'; ?></h1>
 
 <!-- Navigation -->
+<?php if ($isAdmin): ?>
 <nav class="mb-3">
     <a href="add.php" class="btn btn-primary-custom">+ Add New Pet</a>
 </nav>
+<?php endif; ?>
 
 <!-- Show success messages -->
 <?php if (isset($_GET['added'])): ?>
@@ -127,10 +131,12 @@ $speciesResult = $conn->query("SELECT DISTINCT species FROM pet_profiles ORDER B
 
                     <div class="petCardActions">
                         <a href="view.php?id=<?php echo $pet['pet_id']; ?>">View</a>
-                        |
-                        <a href="edit.php?id=<?php echo $pet['pet_id']; ?>">Edit</a>
-                        |
-                        <a href="delete.php?id=<?php echo $pet['pet_id']; ?>" onclick="return confirm('Are you sure you want to remove this pet?')">Delete</a>
+                        <?php if ($isAdmin): ?>
+                            |
+                            <a href="edit.php?id=<?php echo $pet['pet_id']; ?>">Edit</a>
+                            |
+                            <a href="delete.php?id=<?php echo $pet['pet_id']; ?>" onclick="return confirm('Are you sure you want to remove this pet?')">Delete</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

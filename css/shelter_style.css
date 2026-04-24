@@ -6,7 +6,7 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* REMOVE ANY BOOTSTRAP TOP GAP */
+
 .container, .container-fluid {
     margin-top: 0 !important;
     padding-top: 0 !important;
@@ -33,7 +33,7 @@ body {
     object-fit: cover;
 }
 
-/* Dark overlay for readability */
+
 .hero-overlay {
     position: absolute;
     inset: 0;
@@ -58,18 +58,18 @@ body {
     opacity: 0.9;
 }
 
-/* Improve cards spacing */
+
 .card {
     border-radius: 12px;
     overflow: hidden;
 }
 
-/* Page spacing */
+
 .container-custom {
     padding: 20px;
 }
 
-/* Empty state */
+
 .empty-state {
     text-align: center;
     padding: 40px;
@@ -95,7 +95,7 @@ body {
     outline: none !important;
 }
 
-/* Remove Bootstrap blue glow */
+
 .btn-primary:focus {
     box-shadow: none !important;
 }

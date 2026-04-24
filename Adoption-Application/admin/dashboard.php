@@ -1,9 +1,8 @@
 <?php
 session_start();
-// In admin/dashboard.php
-include "../../shared/db.php";      // ✅
-include "../../shared/header.php";  // ✅
-include "../../shared/footer.php";  // ✅
+
+include "../../shared/db.php";
+include "../../shared/header.php";
 $pending   = $conn->query("SELECT COUNT(*) AS c FROM applications WHERE status='pending'"  )->fetch_assoc();
 $approved  = $conn->query("SELECT COUNT(*) AS c FROM applications WHERE status='approved'" )->fetch_assoc();
 $completed = $conn->query("SELECT COUNT(*) AS c FROM applications WHERE status='completed'")->fetch_assoc();
@@ -63,12 +62,12 @@ $recent = $conn->query("
                 <span class="badge bg-<?= $b ?>"><?= $row['status'] ?></span>
             </td>
             <td><?= $row['created_at'] ?></td>
-            <td><a href="../applications/view.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-info">View</a></td>
+            <td><a href="/Adoption-Application/applications/view.php?id=<?= $row['id'] ?>" class="btn btn-sm btn-info">View</a></td>
         </tr>
         <?php endwhile; ?>
     </tbody>
 </table>
 
-<a href="../applications/list.php" class="btn btn-dark">View All Applications</a>
+<a href="/Adoption-Application/index.php" class="btn btn-dark">View All Applications</a>
 
-<?php include "../shared/footer.php"; ?>
+<?php include "../../shared/footer.php"; ?>

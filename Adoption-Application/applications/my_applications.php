@@ -1,11 +1,9 @@
 <?php
 session_start();
-// In applications/apply.php, list.php, edit.php, view.php, delete.php, my_applications.php, success.php
-include "../../shared/db.php";      // ✅
-include "../../shared/header.php";  // ✅
-include "../../shared/footer.php";  // ✅
+require_once "../../shared/db.php";
+require_once "../../shared/header.php";
 
-$user_id = $_SESSION['user_id'] ?? 1;
+$user_id = $_SESSION['user_id'];
 
 $sql = "
     SELECT applications.id, applications.status, applications.interview_date, applications.created_at,
@@ -32,7 +30,7 @@ function statusBadge($status) {
 <?php endif; ?>
 
 <?php if ($result->num_rows === 0): ?>
-    <div class="alert alert-info">You have not applied for any pets yet. <a href="apply.php" class="alert-link">Apply now!</a></div>
+    <div class="alert alert-info">You have not applied for any pets yet. <a href="/pets/index.php" class="alert-link">Browse pets!</a></div>
 <?php else: ?>
 <table class="table table-bordered table-hover align-middle">
     <thead class="table-dark">
@@ -47,7 +45,7 @@ function statusBadge($status) {
             <td><?= $row['id'] ?></td>
             <td class="d-flex align-items-center gap-2">
                 <?php if (!empty($row['pet_photo'])): ?>
-                    <img src="/Adoption-Application/<?= htmlspecialchars($row['pet_photo']) ?>" width="50" height="50" style="object-fit:cover; border-radius:6px;">
+                    <img src="/shared/<?= htmlspecialchars($row['pet_photo']) ?>" width="50" height="50" style="object-fit:cover; border-radius:6px;">
                 <?php else: ?>
                     <span style="font-size:30px;">🐾</span>
                 <?php endif; ?>
@@ -71,6 +69,6 @@ function statusBadge($status) {
 </table>
 <?php endif; ?>
 
-<a href="apply.php" class="btn btn-success mt-2">Apply for Another Pet</a>
+<a href="/pets/index.php" class="btn btn-success mt-2">Browse More Pets</a>
 
-<?php include "../shared/footer.php"; ?>
+<?php require_once "../../shared/footer.php"; ?>

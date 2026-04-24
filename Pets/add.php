@@ -9,7 +9,7 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // Get the data from the form
+    
     $name = $_POST['name'];
     $species = $_POST['species'];
     $breed = $_POST['breed'];
@@ -21,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $adoptionStatus = $_POST['adoption_status'];
     $description = $_POST['description'];
 
-    // Validate the form fields
+    
     if (empty($name)) $errors[] = 'Pet name is required';
     if (empty($species)) $errors[] = 'Species is required';
     if (empty($gender)) $errors[] = 'Gender is required';
 
-    // Handle photo upload
+    
     $photoPath = null;
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $uploadDir = '../shared/uploads/pets/';
 
-            // Create directory if it doesn't exist
+           
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }

@@ -1,9 +1,7 @@
 <?php
 session_start();
-// In applications/apply.php, list.php, edit.php, view.php, delete.php, my_applications.php, success.php
-include "../../shared/db.php";      // ✅
-include "../../shared/header.php";  // ✅
-include "../../shared/footer.php";  // ✅
+require_once "../../shared/db.php";
+require_once "../../shared/header.php";
 
 $id  = intval($_GET['id']);
 $sql = "
@@ -24,7 +22,7 @@ $row = $conn->query($sql)->fetch_assoc();
 
 if (!$row) {
     echo "<div class='alert alert-danger'>Application not found.</div>";
-    include "../shared/footer.php";
+    require_once "../../shared/footer.php";
     exit();
 }
 
@@ -32,7 +30,7 @@ $badge_map = ['pending'=>'warning','approved'=>'success','completed'=>'primary',
 $badge = $badge_map[$row['status']] ?? 'secondary';
 ?>
 
-<h2 class="mb-4">🔍 Application Details #<?= $row['id'] ?></h2>
+<h2 class="mb-4">Application Details #<?= $row['id'] ?></h2>
 
 <div class="row g-4">
     <div class="col-md-6">
@@ -54,10 +52,10 @@ $badge = $badge_map[$row['status']] ?? 'secondary';
 
     <div class="col-md-6">
         <div class="card shadow-sm h-100">
-            <div class="card-header bg-dark text-white">🐾 Pet Information</div>
+            <div class="card-header bg-dark text-white">Pet Information</div>
             <div class="card-body">
                 <?php if (!empty($row['pet_photo'])): ?>
-                    <img src="/Adoption-Application/<?= htmlspecialchars($row['pet_photo']) ?>"
+                    <img src="/shared/<?= htmlspecialchars($row['pet_photo']) ?>"
                          class="img-fluid rounded mb-3" style="max-height:160px; object-fit:cover;">
                 <?php endif; ?>
                 <table class="table table-borderless mb-0">
@@ -82,7 +80,6 @@ $badge = $badge_map[$row['status']] ?? 'secondary';
                     <tr><th>Status</th>         <td><span class="badge bg-<?= $badge ?> fs-6"><?= $row['status'] ?></span></td></tr>
                     <tr><th>Interview Date</th>  <td><?= $row['interview_date'] ?? '<span class="text-muted">Not Scheduled</span>' ?></td></tr>
                     <tr><th>Applied On</th>      <td><?= $row['created_at'] ?></td></tr>
-                    <tr><th>Last Updated</th>    <td><?= $row['updated_at'] ?></td></tr>
                 </table>
             </div>
         </div>
@@ -91,7 +88,7 @@ $badge = $badge_map[$row['status']] ?? 'secondary';
 
 <div class="mt-4 d-flex gap-2">
     <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-warning">Edit Application</a>
-    <a href="list.php"                       class="btn btn-outline-secondary">← Back to List</a>
+    <a href="/Adoption-Application/index.php" class="btn btn-outline-secondary">← Back to List</a>
 </div>
 
-<?php include "../shared/footer.php"; ?>
+<?php require_once "../../shared/footer.php"; ?>
